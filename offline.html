@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Dicoding Story Platform - Offline Mode" />
+    <title>Offline Mode - Dicoding Story Platform</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f8f9fa;
+        color: #333;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+        padding: 20px;
+        text-align: center;
+      }
+
+      .offline-container {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+        max-width: 500px;
+        width: 100%;
+      }
+
+      h1 {
+        color: #4a90e2;
+        margin-bottom: 15px;
+      }
+
+      p {
+        font-size: 18px;
+        line-height: 1.6;
+        margin-bottom: 25px;
+      }
+
+      .icon {
+        font-size: 64px;
+        margin-bottom: 20px;
+      }
+
+      .btn {
+        background-color: #4a90e2;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 4px;
+        font-size: 16px;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+        transition: background-color 0.3s;
+      }
+
+      .btn:hover {
+        background-color: #3a7bc8;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="offline-container">
+      <div class="icon">📡</div>
+      <h1>Anda sedang offline</h1>
+      <p>
+        Sepertinya koneksi internet Anda terputus. Beberapa fitur mungkin tidak
+        tersedia sampai Anda kembali online.
+      </p>
+      <p>Anda masih dapat melihat cerita yang telah tersimpan secara lokal.</p>
+      <button class="btn" onclick="window.location.href='/'">Coba Lagi</button>
+    </div>
+  </body>
+</html>

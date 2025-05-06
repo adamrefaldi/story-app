@@ -1,11 +1,11 @@
 // src/scripts/presenters/home-presenter.js
 
-import StoryApi from "../data/story-api.js";
+import StoryRepository from "../data/story-repository.js";
 
 class HomePresenter {
   constructor({ view }) {
     this._view = view;
-    this._storyApi = StoryApi;
+    this._storyRepository = StoryRepository;
   }
 
   async getAllStories() {
@@ -16,7 +16,8 @@ class HomePresenter {
         error,
         data: stories,
         message,
-      } = await this._storyApi.getAllStories();
+        isOffline,
+      } = await this._storyRepository.getAllStories();
 
       if (error) {
         this._view.showError(message);
@@ -27,12 +28,37 @@ class HomePresenter {
         this._view.showEmpty();
       } else {
         this._view.showStories(stories);
+
+        // Tampilkan notifikasi jika data berasal dari offline storage
+        if (isOffline) {
+          this._showOfflineNotification();
+        }
       }
 
       return stories;
     } catch (error) {
       this._view.showError(error.message);
       return [];
+    }
+  }
+
+  async toggleFavorite(storyId) {
+    try {
+      const { error, message, data } =
+        await this._storyRepository.toggleFavoriteStory(storyId);
+
+      if (error) {
+        this._view.showError(message);
+        return;
+      }
+
+      // Perbarui status favorit di UI tanpa refresh seluruh halaman
+      this._view.updateFavoriteStatus(storyId, data.isFavorite);
+
+      // Tampilkan notifikasi toast
+      this._showToast(message);
+    } catch (error) {
+      this._view.showError(error.message);
     }
   }
 
@@ -92,6 +118,49 @@ class HomePresenter {
     });
 
     return map;
+  }
+
+  _showOfflineNotification() {
+    const notification = document.createElement("div");
+    notification.classList.add("offline-notification");
+    notification.innerHTML = `
+      <div class="offline-icon">
+        <i class="fas fa-wifi-slash"></i>
+      </div>
+      <div class="offline-message">
+        <strong>Anda sedang melihat data offline</strong>
+        <p>Koneksi internet tidak tersedia. Data ditampilkan dari penyimpanan lokal.</p>
+      </div>
+    `;
+
+    document.body.appendChild(notification);
+
+    // Sembunyikan notifikasi setelah 5 detik
+    setTimeout(() => {
+      notification.classList.add("fade-out");
+      setTimeout(() => {
+        if (notification.parentNode) {
+          document.body.removeChild(notification);
+        }
+      }, 300);
+    }, 5000);
+  }
+
+  _showToast(message) {
+    // Simple toast implementation
+    const toast = document.createElement("div");
+    toast.classList.add("toast");
+    toast.textContent = message;
+
+    document.body.appendChild(toast);
+
+    // Remove toast after 3 seconds
+    setTimeout(() => {
+      toast.classList.add("toast-hide");
+      setTimeout(() => {
+        document.body.removeChild(toast);
+      }, 300);
+    }, 3000);
   }
 }
 

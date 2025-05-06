@@ -1,13 +1,17 @@
-import HomePage from '../views/pages/home-page.js';
-import AddStoryPage from '../views/pages/add-story-page.js';
-import LoginPage from '../views/pages/login-page.js';
-import RegisterPage from '../views/pages/register-page.js';
+// src/scripts/routes/routes.js
+import HomePage from "../views/pages/home-page.js";
+import AddStoryPage from "../views/pages/add-story-page.js";
+import RegisterPage from "../views/pages/register-page.js";
+import LoginPage from "../views/pages/login-page.js";
+import FavoritePage from "../views/pages/favorite-page.js";
 
 const routes = {
-  '/': HomePage,
-  '/login': LoginPage,
-  '/register': RegisterPage,
-  '/add': AddStoryPage,
+  "/": HomePage,
+  "/home": HomePage,
+  "/add": AddStoryPage,
+  "/register": RegisterPage,
+  "/login": LoginPage,
+  "/favorites": FavoritePage, // Menambahkan route baru untuk halaman favorit
 };
 
 export default routes;
