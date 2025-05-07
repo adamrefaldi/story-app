@@ -42,23 +42,26 @@ class HomePresenter {
     }
   }
 
-  async toggleFavorite(storyId) {
+  async deleteStory(storyId) {
     try {
-      const { error, message, data } =
-        await this._storyRepository.toggleFavoriteStory(storyId);
+      const { error, message } = await this._storyRepository.deleteStory(
+        storyId
+      );
 
       if (error) {
         this._view.showError(message);
-        return;
+        return false;
       }
-
-      // Perbarui status favorit di UI tanpa refresh seluruh halaman
-      this._view.updateFavoriteStatus(storyId, data.isFavorite);
 
       // Tampilkan notifikasi toast
       this._showToast(message);
+
+      // Refresh stories setelah penghapusan
+      await this.getAllStories();
+      return true;
     } catch (error) {
       this._view.showError(error.message);
+      return false;
     }
   }
 

@@ -39,6 +39,9 @@ const StoryItemTemplate = (story) => {
                 : '<i class="fas fa-map-marker-alt text-muted"></i> Tidak ada lokasi'
             }
           </div>
+          <button class="delete-button" data-id="${story.id}">
+            <i class="fas fa-trash"></i> Hapus Cerita
+          </button>
         </div>
       </div>
     </div>

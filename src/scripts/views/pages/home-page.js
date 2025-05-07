@@ -42,11 +42,24 @@ const HomePage = {
       this._presenter.initMap(mapContainer, stories);
     }
 
-    // Tambahkan event listener untuk tombol favorite
+    // Tambahkan event listener untuk tombol hapus
     document.addEventListener("click", async (event) => {
-      if (event.target.classList.contains("favorite-button")) {
-        const storyId = event.target.dataset.id;
-        await this._presenter.toggleFavorite(storyId);
+      if (
+        event.target.classList.contains("delete-button") ||
+        (event.target.parentElement &&
+          event.target.parentElement.classList.contains("delete-button"))
+      ) {
+        // Dapatkan ID dari tombol atau parent-nya
+        const button = event.target.classList.contains("delete-button")
+          ? event.target
+          : event.target.parentElement;
+
+        const storyId = button.dataset.id;
+
+        // Konfirmasi penghapusan
+        if (confirm("Apakah Anda yakin ingin menghapus cerita ini?")) {
+          await this._presenter.deleteStory(storyId);
+        }
       }
     });
 
@@ -130,43 +143,10 @@ const HomePage = {
     storiesContainer.innerHTML = "";
 
     stories.forEach((story) => {
-      const storyItemHTML = StoryItemTemplate(story);
       const storyElement = document.createElement("div");
-      storyElement.innerHTML = storyItemHTML;
-
-      // Tambahkan tombol favorit
-      const favoriteButton = document.createElement("button");
-      favoriteButton.classList.add("favorite-button");
-      favoriteButton.dataset.id = story.id;
-
-      if (story.isFavorite) {
-        favoriteButton.classList.add("favorited");
-        favoriteButton.innerHTML = `<i class="fas fa-heart"></i> Favorit`;
-      } else {
-        favoriteButton.innerHTML = `<i class="far fa-heart"></i> Tambah ke Favorit`;
-      }
-
-      const storyCard = storyElement.querySelector(".story-item");
-      storyCard.appendChild(favoriteButton);
-
+      storyElement.innerHTML = StoryItemTemplate(story);
       storiesContainer.appendChild(storyElement.firstElementChild);
     });
-  },
-
-  updateFavoriteStatus(storyId, isFavorite) {
-    const favoriteButton = document.querySelector(
-      `.favorite-button[data-id="${storyId}"]`
-    );
-
-    if (favoriteButton) {
-      if (isFavorite) {
-        favoriteButton.classList.add("favorited");
-        favoriteButton.innerHTML = `<i class="fas fa-heart"></i> Favorit`;
-      } else {
-        favoriteButton.classList.remove("favorited");
-        favoriteButton.innerHTML = `<i class="far fa-heart"></i> Tambah ke Favorit`;
-      }
-    }
   },
 };
 
